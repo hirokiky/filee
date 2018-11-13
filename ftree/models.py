@@ -27,6 +27,10 @@ class FileTree:
 
     TOO_DEEP = 'TOO_DEEP'
 
+    @property
+    def is_dir(self):
+        return bool(self.children)
+
     @classmethod
     def load(cls, target: Optional[str]=None, _depth: int=0, _name: str=''):
         target = target or os.getcwd()
@@ -85,10 +89,6 @@ class FileTree:
         else:
             for c in self.children:
                 c.save(os.path.join(target, self.name))
-
-    @property
-    def is_dir(self):
-        return bool(self.children)
 
     @classmethod
     def from_dict(cls, d: dict):
