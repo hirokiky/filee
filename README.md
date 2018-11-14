@@ -49,8 +49,8 @@ If files are binary file, it will encode by BASE64.
 ```json
 {
     "children": [
-        { ... },
-        { ... }
+        { },
+        { }
     ],
     "name": "dirname",
     "content": null,
