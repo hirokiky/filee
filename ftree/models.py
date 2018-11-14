@@ -74,7 +74,7 @@ class FileTree:
             )
 
         try:
-            content_str = content.decode('utf-8')
+            content_str = content.decode(settings.ENCODING)
             binary = False
         except UnicodeDecodeError:
             binary = True
