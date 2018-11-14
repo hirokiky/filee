@@ -1,36 +1,36 @@
 import base64
-from dataclasses import dataclass
 import os
-from typing import List, Optional, ClassVar
+from dataclasses import dataclass
+from typing import List, Optional
 
 from . import settings
 
 
-def raw_to_encoded(b):
-    return base64.b64encode(c).decode('ascii')
+def raw_to_encoded(b: bytes) -> str:
+    return base64.b64encode(b).decode('ascii')
 
 
-def encoded_to_raw(s):
-    return base64.b64decode(b)
+def encoded_to_raw(s: str) -> bytes:
+    return base64.b64decode(s)
 
 
 @dataclass
 class FileTree:
     name: str
-    content: str=''
+    content: Optional[str] = ''
 
-    too_big: bool=False
-    binary: bool=False
-    read_only: bool=False
+    too_big: bool = False
+    binary: bool = False
+    read_only: bool = False
 
-    children: Optional[List[dict]]=None
+    children: Optional[List[dict]] = None
 
     TOO_DEEP = 'TOO_DEEP'
 
     @classmethod
-    def load(cls, target: Optional[str]=None, _depth: int=0, _name: str=''):
+    def load(cls, target: Optional[str] = None, _depth: int = 0, _name: str = ''):
         target = target or os.getcwd()
-        if depth > settings.MAX_DEPTH:
+        if _depth > settings.MAX_DEPTH:
             return cls(name=cls.TOO_DEEP)
 
         read_only = os.access(target, os.R_OK) and not os.access(target, os.W_OK)
@@ -43,10 +43,10 @@ class FileTree:
                     _depth=_depth+1,
                     _name=n,
                 ) for n in os.listdir(target)[:settings.MAX_CHILDREN]],
-                read_only=readonly
+                read_only=read_only
             )
-        with open(path, 'rb') as f:
-            content = f.read(settings.MAX_SIZE + 1)
+        with open(target, 'rb') as f:
+            content: bytes = f.read(settings.MAX_SIZE + 1)
 
         if len(content) > settings.MAX_SIZE:
             return cls(
@@ -57,21 +57,21 @@ class FileTree:
                 binary=True,
             )
         try:
-            content = content.decode('utf-8')
+            content_str = content.decode('utf-8')
             binary = False
         except UnicodeDecodeError:
             binary = True
-            content = raw_to_encoded(content)
+            content_str = raw_to_encoded(content)
 
         return cls(
             name=_name,
-            content=content,
+            content=content_str,
             binary=binary,
             too_big=False,
             read_only=read_only
         )
 
-    def save(target=None):
+    def save(self, target=None):
         target = target or os.getcwd()
         if not self.is_dir:
             p = os.path.join(target, self.name)
@@ -99,6 +99,6 @@ class FileTree:
                 **d
             )
         return cls(
+            children=[cls.from_dict(c) for c in children],
             **d,
-            children=[cls.from_dict(c) for c in children]
         )
