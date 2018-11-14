@@ -42,7 +42,7 @@ $ ftree load | python -m json.tool
 ```
 
 The content will be encoded by `FTREE_ENCODING`.
-If files are binary file, it will encode by BASE64.
+If files are binary file, they will be encoded by BASE64.
 
 ### Directory
 
