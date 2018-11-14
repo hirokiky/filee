@@ -102,3 +102,19 @@ class FileTree:
             children=[cls.from_dict(c) for c in children],
             **d,
         )
+
+    def to_dict(self):
+        data = {
+            k: getattr(self, k)
+            for k in self.__annotations__.keys()
+        }
+        if not self.is_dir:
+            return data
+        else:
+            children = data.pop('children')
+            return {
+                'children': [
+                    c.to_dict() for c in children
+                ],
+                **data,
+            }
