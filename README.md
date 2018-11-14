@@ -41,6 +41,9 @@ $ ftree load | python -m json.tool
 }
 ```
 
+The content will be encoded by `FTREE_ENCODING`.
+If files are binary file, it will encode by BASE64.
+
 ### Directory
 
 ```json
@@ -76,7 +79,21 @@ $ ftree load
 
 By usinig `--etag` option, the command will return only changed files.
 It will save hashes of each files in `FTREE_LOAD_FILE_HASHES` setting path,
-and recognize whether these files are changed from last loading or not.
+and recognize files are changed from last loading or not.
+
+```json
+{
+    "name": "README.md",
+    "content": null,
+    "too_big": false,
+    "binary": false,
+    "read_only": false,
+    "changed": false,
+    "children": null
+}
+```
+
+This option can reduce the size of JSON output.
 
 ## Save Command
 
