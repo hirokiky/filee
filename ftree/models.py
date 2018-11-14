@@ -33,7 +33,7 @@ class FileTree:
     def load(cls,
              target: Optional[str] = None,
              hasher: Optional[FileHasher] = None,
-             _depth: int = -1, _name: str = ''):
+             _depth: int = 0, _name: str = ''):
 
         target = target or os.getcwd()
         if _depth > settings.MAX_DEPTH:
@@ -49,7 +49,7 @@ class FileTree:
                     hasher=hasher,
                     _depth=_depth+1,
                     _name=n,
-                ) for n in os.listdir(target)[:settings.MAX_CHILDREN]],
+                ) for n in sorted(os.listdir(target))[:settings.MAX_CHILDREN]],
                 read_only=read_only
             )
 
