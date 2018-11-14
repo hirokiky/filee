@@ -2,13 +2,20 @@ import json
 
 import click
 
+from . import settings
+from .hasher import FileHasher
 from .models import FileTree
 
 
 @click.command()
 @click.option('--dir', default='.', help='Target dir to load')
-def load(dir):
-    ft = FileTree.load(dir)
+@click.option('--etag/--no-etag', default=False, help='Use Etag hashing')
+def load(dir, etag):
+    if etag:
+        with FileHasher(settings.LOAD_FILE_HASHES) as hasher:
+            ft = FileTree.load(dir, hasher)
+    else:
+        ft = FileTree.load(dir)
     print(json.dumps(ft.to_dict(), ensure_ascii=False))
 
 

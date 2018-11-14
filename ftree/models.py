@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 from . import settings
+from .hasher import FileHasher
 
 
 def raw_to_encoded(b: bytes) -> str:
@@ -17,18 +18,23 @@ def encoded_to_raw(s: str) -> bytes:
 @dataclass
 class FileTree:
     name: str
-    content: Optional[str] = ''
+    content: Optional[str] = None
 
     too_big: bool = False
     binary: bool = False
     read_only: bool = False
+    changed: bool = True
 
     children: Optional[List[dict]] = None
 
     TOO_DEEP = 'TOO_DEEP'
 
     @classmethod
-    def load(cls, target: Optional[str] = None, _depth: int = -1, _name: str = ''):
+    def load(cls,
+             target: Optional[str] = None,
+             hasher: Optional[FileHasher] = None,
+             _depth: int = -1, _name: str = ''):
+
         target = target or os.getcwd()
         if _depth > settings.MAX_DEPTH:
             return cls(name=cls.TOO_DEEP)
@@ -40,11 +46,13 @@ class FileTree:
                 name=_name,
                 children=[cls.load(
                     target=os.path.join(target, n),
+                    hasher=hasher,
                     _depth=_depth+1,
                     _name=n,
                 ) for n in os.listdir(target)[:settings.MAX_CHILDREN]],
                 read_only=read_only
             )
+
         with open(target, 'rb') as f:
             content: bytes = f.read(settings.MAX_SIZE + 1)
 
@@ -56,6 +64,15 @@ class FileTree:
                 read_only=read_only,
                 binary=True,
             )
+
+        if hasher and not hasher.has_changed(target, content):
+            return cls(
+                name=_name,
+                too_big=False,
+                changed=False,
+                read_only=read_only,
+            )
+
         try:
             content_str = content.decode('utf-8')
             binary = False
