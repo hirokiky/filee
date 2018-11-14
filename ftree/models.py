@@ -28,7 +28,7 @@ class FileTree:
     TOO_DEEP = 'TOO_DEEP'
 
     @classmethod
-    def load(cls, target: Optional[str] = None, _depth: int = 0, _name: str = ''):
+    def load(cls, target: Optional[str] = None, _depth: int = -1, _name: str = ''):
         target = target or os.getcwd()
         if _depth > settings.MAX_DEPTH:
             return cls(name=cls.TOO_DEEP)
