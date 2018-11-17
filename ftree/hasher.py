@@ -4,9 +4,9 @@ import os
 
 
 class FileHasher:
-    def __init__(self, path):
+    def __init__(self, path, hashes=None):
         self.path = path
-        self.hashes = {}
+        self.hashes = hashes or {}
         self.changed = False
 
     def load_hash(self):
@@ -43,7 +43,7 @@ class FileHasher:
         m.update(content)
         return m.hexdigest()
 
-    def has_changed(self, path, content):
+    def has_changed(self, path: str, content: bytes):
         path = os.path.abspath(path)
 
         h = self.calc_hash(content)
