@@ -48,12 +48,9 @@ class FileHasher:
 
         h = self.calc_hash(content)
 
-        self.changed = True
-        if path not in self.hashes:
+        if path not in self.hashes or self.hashes[path] != h:
+            self.changed = True
             self.hashes[path] = h
             return True
 
-        if self.hashes[path] != h:
-            self.hashes[path] = h
-            return True
         return False
