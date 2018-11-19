@@ -1,4 +1,4 @@
-from ftree.models import FileTree
+from filee.models import FileTree
 
 
 def test_load(tmpdir):

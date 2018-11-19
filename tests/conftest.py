@@ -1,5 +1,5 @@
-from ftree.hasher import FileHasher
-from ftree.testing import OverrideSettings
+from filee.hasher import FileHasher
+from filee.testing import OverrideSettings
 
 import pytest
 
@@ -12,5 +12,5 @@ def override_settings():
 
 @pytest.fixture
 def hasher(tmpdir, override_settings):
-    h = tmpdir.join('.ftreeloadhashes')
+    h = tmpdir.join('.fileeloadhashes')
     yield FileHasher(h.strpath)

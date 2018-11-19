@@ -1,4 +1,4 @@
-from ftree.hasher import FileHasher
+from filee.hasher import FileHasher
 
 import pytest
 

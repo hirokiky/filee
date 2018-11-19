@@ -1,14 +1,14 @@
-# ftree
+# filee
 
 A command to save/load files from/to JSON.
 
 ```bash
-$ ftree load | python -m json.tool
+$ filee load | python -m json.tool
 {
     "children": [
         {
             "name": "README.md",
-            "content": "# ftree\n\nREADME\n",
+            "content": "# filee\n\nREADME\n",
             "too_big": false,
             "binary": false,
             "read_only": false,
@@ -32,7 +32,7 @@ $ ftree load | python -m json.tool
 ```json
 {
     "name": "README.md",
-    "content": "# ftree\n\nREADME\n",
+    "content": "# filee\n\nREADME\n",
     "too_big": false,
     "binary": false,
     "read_only": false,
@@ -69,7 +69,7 @@ The `name` of root directory will be empty string (`''`).
 The JSON will be formed as above file tree format.
 
 ```bash
-$ ftree load
+$ filee load
 ```
 
 * `--dir`: Target directory to load. default is current directory.
@@ -101,15 +101,15 @@ This option can reduce the size of JSON output.
 The JSON should be formed as above file tree format.
 
 ```bash
-$ ftree save
+$ filee save
 ```
 
 ## Settings
 
-You can specify settings for ftree command by environment variables:
+You can specify settings for filee command by environment variables:
 
 * `FTREE_ENCODING`: Save/Load encoding. default is `"utf-8"`
 * `FTREE_MAX_SIZE`: Max file size (bytes) to load. default is 1MB.
 * `FTREE_MAX_CHILDREN`Max number of children of directories. default is 50.
 * `FTREE_MAX_DEPTH`: Max number of depth of directory tree. default is 20.
-* `FTREE_LOAD_FILE_HASHES`: File path to save hashes of loading. default is `~/.ftreeloadhashes`.
+* `FTREE_LOAD_FILE_HASHES`: File path to save hashes of loading. default is `~/.fileeloadhashes`.

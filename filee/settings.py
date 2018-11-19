@@ -8,5 +8,5 @@ MAX_CHILDREN = int(os.environ.get('FTREE_MAX_CHILDREN', 50))
 MAX_DEPTH = int(os.environ.get('FTREE_MAX_DEPTH', 20))
 
 LOAD_FILE_HASHES = os.path.expanduser(
-    os.environ.get('FTREE_LOAD_FILE_HASHES', '~/.ftreeloadhashes')
+    os.environ.get('FTREE_LOAD_FILE_HASHES', '~/.fileeloadhashes')
 )
