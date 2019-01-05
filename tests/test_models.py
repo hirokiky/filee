@@ -19,7 +19,6 @@ def test_load(tmpdir):
     assert not main.read_only
     assert not main.binary
     assert not main.too_big
-    assert main.changed
 
     assert ft.children[1].name == 'sub'
     assert ft.children[1].is_dir
@@ -31,7 +30,6 @@ def test_load(tmpdir):
     assert not testfile.read_only
     assert not testfile.binary
     assert not testfile.too_big
-    assert testfile.changed
 
 
 def test_load_binary(tmpdir):
@@ -70,7 +68,6 @@ def test_load_too_big(tmpdir, override_settings):
     assert ft.children[0].name == 'main.py'
     assert ft.children[0].content is None
     assert ft.children[0].too_big
-    assert ft.children[0].binary
 
 
 def test_load_too_deep(tmpdir, override_settings):

@@ -20,10 +20,10 @@ class FileTree:
     name: str
     content: Optional[str] = None
 
-    too_big: bool = False
-    binary: bool = False
-    read_only: bool = False
-    changed: bool = True
+    too_big: Optional[bool] = None
+    binary: Optional[bool] = None
+    read_only: Optional[bool] = None
+    changed: Optional[bool] = None
 
     children: Optional[List[dict]] = None
 
@@ -70,12 +70,12 @@ class FileTree:
                 too_big=True,
                 content=None,
                 read_only=read_only,
-                binary=True,
             )
 
         if hasher and not hasher.has_changed(target, content):
             return cls(
                 name=_name,
+                content=None,
                 too_big=False,
                 changed=False,
                 read_only=read_only,
@@ -93,7 +93,8 @@ class FileTree:
             content=content_str,
             binary=binary,
             too_big=False,
-            read_only=read_only
+            read_only=read_only,
+            changed=True if hasher else None,
         )
 
     def save(self, target=None):
@@ -131,6 +132,7 @@ class FileTree:
         data = {
             k: getattr(self, k)
             for k in self.__annotations__.keys()
+            if getattr(self, k) is not None
         }
         if not self.is_dir:
             return data
