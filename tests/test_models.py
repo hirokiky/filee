@@ -2,7 +2,7 @@ from filee.models import FileTree
 
 
 def test_load(tmpdir):
-    t = tmpdir.mkdir('sub').join('tests.py')
+    t = tmpdir.mkdir('tests').join('tests.py')
     t.write('import pytest\n')
     m = tmpdir.join('main.py')
     m.write('import this\n')
@@ -20,8 +20,9 @@ def test_load(tmpdir):
     assert not main.binary
     assert not main.too_big
 
-    assert ft.children[1].name == 'sub'
+    assert ft.children[1].name == 'tests'
     assert ft.children[1].is_dir
+    assert not ft.children[1].read_only
     assert len(ft.children[1].children) == 1
 
     testfile = ft.children[1].children[0]
