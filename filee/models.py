@@ -112,7 +112,7 @@ class FileTree:
                 os.mkdir(p)
 
             for c in self.children:
-                c.save(os.path.join(target, self.name))
+                c.save(p)
 
     @classmethod
     def from_dict(cls, d: dict):
