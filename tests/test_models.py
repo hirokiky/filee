@@ -116,3 +116,24 @@ def test_load_etag(tmpdir, hasher):
     assert ft.children[1].name == 'second.py'
     assert ft.children[1].content is None
     assert not ft.children[1].changed
+
+
+def test_save(tmpdir):
+    td = tmpdir.mkdir('work')
+
+    target = FileTree.from_dict({
+        'name': '',
+        'children': [
+            {'name': 'main.py', 'content': 'import this\n'},
+            {'name': 'tests', 'children': [
+                {'name': 'test_main.py', 'content': 'import unittest\n'},
+            ]}
+        ]
+    })
+    target.save(td.strpath)
+
+    c = td.join('main.py').read()
+    assert c == 'import this\n'
+    assert td.join('tests').isdir()
+    c = td.join('tests/test_main.py').read()
+    assert c == 'import unittest\n'

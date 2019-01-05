@@ -33,6 +33,10 @@ class FileTree:
     def is_dir(self):
         return bool(self.children)
 
+    @property
+    def is_root(self):
+        return self.is_dir and self.name == ''
+
     @classmethod
     def load(cls,
              target: Optional[str] = None,
@@ -94,8 +98,8 @@ class FileTree:
 
     def save(self, target=None):
         target = target or os.getcwd()
+        p = os.path.join(target, self.name)
         if not self.is_dir:
-            p = os.path.join(target, self.name)
 
             if self.binary:
                 with open(p, mode='wb') as f:
@@ -104,6 +108,9 @@ class FileTree:
                 with open(p, mode='w', encoding='utf-8') as f:
                     f.write(self.content)
         else:
+            if not self.is_root and not os.path.exists(p):
+                os.mkdir(p)
+
             for c in self.children:
                 c.save(os.path.join(target, self.name))
 
